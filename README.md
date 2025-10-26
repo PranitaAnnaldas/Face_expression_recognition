@@ -312,8 +312,8 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/PranitaAnnaldas/facial-expression-recognition/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/PranitaAnnaldas/facial-expression-recognition/discussions)
+- **Issues**: [GitHub Issues](https://github.com/PranitaAnnaldas/Face_expression_recognition/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/PranitaAnnaldas/Face_expression_recognition/discussions)
 
 ## ⭐ Show Your Support
 
