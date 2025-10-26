@@ -7,6 +7,12 @@ A real-time facial expression recognition system powered by deep learning. This 
 ![Flask](https://img.shields.io/badge/Flask-3.1-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
+## 🌐 Live Demo
+
+**Try it now**: [https://facial-expression-recognition-3stp.onrender.com](https://facial-expression-recognition-3stp.onrender.com)
+
+> **Note**: The app may take 30-60 seconds to wake up on first visit (free tier limitation)
+
 ## 🌟 Features
 
 ### Core Functionality
@@ -158,7 +164,7 @@ print(result)
 ## 📁 Project Structure
 
 ```
-facial-expression-recognition/
+Face_expression_recognition/
 ├── app.py                          # Flask backend
 ├── test_model.py                   # Model testing script
 ├── requirements.txt                # Dependencies
@@ -233,10 +239,53 @@ The included Jupyter notebook (`Face_expression_recognition.ipynb`) contains:
 
 ## 🚀 Deployment
 
+### Live on Render ✅
+
+This project is deployed at: **[https://facial-expression-recognition-3stp.onrender.com](https://facial-expression-recognition-3stp.onrender.com)**
+
+**Deployment Details:**
+- Platform: Render (Free Tier)
+- Server: Gunicorn with 1 worker
+- Region: Auto-selected
+- Status: Live 🟢
+
+**Known Limitations (Free Tier):**
+- ⏱️ Cold start: 30-60 seconds on first visit
+- 💤 Spins down after 15 minutes of inactivity
+- 🐌 Slower inference (CPU only, no GPU)
+- 📦 512 MB RAM limit
+
 ### Local Development
 ```bash
 python app.py
 ```
+
+### Deploy Your Own
+
+#### Render (Recommended)
+1. Fork this repository
+2. Create account on [Render](https://render.com)
+3. Click "New +" → "Web Service"
+4. Connect your GitHub repository
+5. Configure:
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app`
+   - **Environment**: Python 3
+6. Click "Create Web Service"
+
+#### Heroku
+```bash
+# Install Heroku CLI
+heroku login
+heroku create your-app-name
+git push heroku main
+```
+
+#### Railway
+1. Go to [Railway.app](https://railway.app)
+2. Click "New Project" → "Deploy from GitHub"
+3. Select your repository
+4. Railway auto-detects and deploys
 
 ### Production (Gunicorn)
 ```bash
@@ -252,7 +301,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .
 EXPOSE 5000
-CMD ["python", "app.py"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
 ```
 
 Build and run:

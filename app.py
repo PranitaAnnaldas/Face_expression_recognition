@@ -11,7 +11,8 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the trained model
-MODEL_PATH = 'trained_models/emotion_model_best.h5'
+import os
+MODEL_PATH = os.environ.get('MODEL_PATH', 'trained_models/emotion_model_best.h5')
 model = tf.keras.models.load_model(MODEL_PATH)
 
 # Emotion labels
@@ -88,8 +89,10 @@ def health():
     return jsonify({'status': 'healthy', 'model_loaded': model is not None})
 
 if __name__ == '__main__':
+    import os
+    port = int(os.environ.get('PORT', 5000))
     print("🚀 Starting Facial Expression Recognition Server...")
     print(f"📊 Model loaded: {MODEL_PATH}")
     print(f"🎭 Emotions: {', '.join(EMOTIONS)}")
-    print("✅ Server ready at http://localhost:5000")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    print(f"✅ Server ready on port {port}")
+    app.run(debug=False, host='0.0.0.0', port=port)

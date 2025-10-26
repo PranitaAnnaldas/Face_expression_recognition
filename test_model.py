@@ -10,7 +10,7 @@ def test_model_loading():
     """Test if model can be loaded"""
     print("🔍 Testing model loading...")
     try:
-        model = tf.keras.models.load_model('emotion_model_best.h5')
+        model = tf.keras.models.load_model('trained_models/emotion_model_best.h5')
         print("✅ Model loaded successfully!")
         return model
     except Exception as e:
