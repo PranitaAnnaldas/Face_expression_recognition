@@ -21,8 +21,8 @@ Click the "Fork" button at the top right of the repository page.
 ### 2. Clone Your Fork
 
 ```bash
-git clone https://github.com/PranitaAnnaldas/facial-expression-recognition.git
-cd facial-expression-recognition
+git clone https://github.com/PranitaAnnaldas/Face_expression_recognition.git
+cd Face_expression_recognition
 ```
 
 ### 3. Create a Branch

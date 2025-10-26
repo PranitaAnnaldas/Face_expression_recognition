@@ -267,7 +267,7 @@ if (aboutBtn) {
             </ul>
             
             <p style="margin-top: 20px; text-align: center;">
-                <a href="https://github.com/PranitaAnnaldas/facial-expression-recognition" target="_blank" style="color: #667eea;">
+                <a href="https://github.com/PranitaAnnaldas/Face_expression_recognition" target="_blank" style="color: #667eea;">
                     <i class="fab fa-github"></i> View on GitHub
                 </a>
             </p>
