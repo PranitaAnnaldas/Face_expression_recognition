@@ -64,7 +64,7 @@ python test_model.py
 - **Training Accuracy**: 63.6%
 - **Model Size**: 78 MB
 - **Parameters**: 6.5M
-- **Dataset**: FER2013 (28,709 training images)
+- **Dataset**: [Face Expression Recognition Dataset](https://www.kaggle.com/datasets/jonathanoheix/face-expression-recognition-dataset) (28,709 training images)
 
 ### Per-Emotion Performance
 | Emotion | Accuracy | Notes |
@@ -218,7 +218,7 @@ app.run(debug=True, port=5001)  # Change to your port
 ## 🧠 Training Your Own Model
 
 The included Jupyter notebook (`Face_expression_recognition.ipynb`) contains:
-1. Dataset download from Kaggle (FER2013)
+1. Dataset download from Kaggle ([Face Expression Recognition Dataset](https://www.kaggle.com/datasets/jonathanoheix/face-expression-recognition-dataset))
 2. Data preprocessing and augmentation
 3. Model architecture definition
 4. Training with callbacks (EarlyStopping, ReduceLROnPlateau)
@@ -226,7 +226,7 @@ The included Jupyter notebook (`Face_expression_recognition.ipynb`) contains:
 
 **To retrain:**
 1. Open notebook in Google Colab
-2. Upload Kaggle API credentials
+2. Upload Kaggle API credentials (get from [Kaggle Account Settings](https://www.kaggle.com/settings/account))
 3. Run all cells
 4. Download trained model
 5. Replace `emotion_model_best.h5`
@@ -278,7 +278,7 @@ This project is licensed under the MIT License - see the `LICENSE` file for deta
 
 ## 🙏 Acknowledgments
 
-- **Dataset**: [FER2013](https://www.kaggle.com/datasets/msambare/fer2013) from Kaggle
+- **Dataset**: [Face Expression Recognition Dataset](https://www.kaggle.com/datasets/jonathanoheix/face-expression-recognition-dataset) from Kaggle
 - **Framework**: TensorFlow/Keras
 - **Face Detection**: OpenCV Haar Cascades
 - **Web Framework**: Flask
