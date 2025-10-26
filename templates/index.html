@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facial Expression Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="emoji-float">😊</div>
+        <div class="emoji-float">😢</div>
+        <div class="emoji-float">😠</div>
+        <div class="emoji-float">😲</div>
+        <div class="emoji-float">😐</div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>🎭 Facial Expression Recognition</h1>
+                <p class="subtitle">AI-powered emotion detection using deep learning</p>
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <i class="fas fa-brain"></i>
+                        <span>7 Emotions</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>65.8% Accuracy</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-users"></i>
+                        <span>Multi-Face</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Tips Section -->
+            <div class="tips-section">
+                <div class="tip-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>Use clear, well-lit photos for best results</span>
+                </div>
+                <div class="tip-card">
+                    <i class="fas fa-smile"></i>
+                    <span>Happy faces are detected with 85%+ accuracy</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <div class="button-group">
+                    <button id="uploadBtn" class="btn btn-primary">
+                        <i class="fas fa-upload"></i>
+                        <span>Upload Image</span>
+                    </button>
+                    <button id="webcamBtn" class="btn btn-secondary">
+                        <i class="fas fa-camera"></i>
+                        <span>Use Webcam</span>
+                    </button>
+                    <button id="captureBtn" class="btn btn-success" style="display: none;">
+                        <i class="fas fa-camera-retro"></i>
+                        <span>Capture Photo</span>
+                    </button>
+                    <button id="stopWebcamBtn" class="btn btn-danger" style="display: none;">
+                        <i class="fas fa-stop-circle"></i>
+                        <span>Stop Webcam</span>
+                    </button>
+                    <button id="downloadBtn" class="btn btn-info" style="display: none;">
+                        <i class="fas fa-download"></i>
+                        <span>Download Results</span>
+                    </button>
+                </div>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            </div>
+
+            <div class="preview-section">
+                <div class="image-container">
+                    <video id="webcam" autoplay playsinline style="display: none;"></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                    <img id="preview" src="" alt="Preview" style="display: none;">
+                    <div id="placeholder" class="placeholder">
+                        <div class="placeholder-content">
+                            <div class="animated-icon">
+                                <i class="fas fa-image fa-3x"></i>
+                            </div>
+                            <h3>Get Started</h3>
+                            <p>Upload an image or use webcam to detect emotions</p>
+                            <p class="placeholder-hint">
+                                <i class="fas fa-arrow-up"></i> Use the buttons above or drag & drop an image here
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="results" class="results" style="display: none;">
+                <div class="results-header">
+                    <h2><i class="fas fa-chart-bar"></i> Detection Results</h2>
+                    <button id="shareBtn" class="share-btn">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+                <div id="resultsContent"></div>
+            </div>
+
+            <div id="loading" class="loading" style="display: none;">
+                <div class="loading-animation">
+                    <div class="spinner"></div>
+                    <div class="loading-emojis">
+                        <span class="loading-emoji">😊</span>
+                        <span class="loading-emoji">😢</span>
+                        <span class="loading-emoji">😠</span>
+                    </div>
+                </div>
+                <p>Analyzing emotions...</p>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+
+            <div id="error" class="error" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="errorText"></span>
+            </div>
+
+            <!-- History Section -->
+            <div id="history" class="history-section" style="display: none;">
+                <h3><i class="fas fa-history"></i> Recent Detections</h3>
+                <div id="historyContent" class="history-grid"></div>
+                <button id="clearHistory" class="btn-clear">
+                    <i class="fas fa-trash"></i> Clear History
+                </button>
+            </div>
+        </div>
+
+        <footer>
+            <div class="emotion-legend">
+                <h3><i class="fas fa-palette"></i> Detectable Emotions</h3>
+                <div class="emotion-tags">
+                    <span class="tag tag-angry" data-emotion="angry">
+                        <span class="tag-emoji">😠</span>
+                        <span class="tag-name">Angry</span>
+                    </span>
+                    <span class="tag tag-disgust" data-emotion="disgust">
+                        <span class="tag-emoji">🤢</span>
+                        <span class="tag-name">Disgust</span>
+                    </span>
+                    <span class="tag tag-fear" data-emotion="fear">
+                        <span class="tag-emoji">😨</span>
+                        <span class="tag-name">Fear</span>
+                    </span>
+                    <span class="tag tag-happy" data-emotion="happy">
+                        <span class="tag-emoji">😊</span>
+                        <span class="tag-name">Happy</span>
+                    </span>
+                    <span class="tag tag-neutral" data-emotion="neutral">
+                        <span class="tag-emoji">😐</span>
+                        <span class="tag-name">Neutral</span>
+                    </span>
+                    <span class="tag tag-sad" data-emotion="sad">
+                        <span class="tag-emoji">😢</span>
+                        <span class="tag-name">Sad</span>
+                    </span>
+                    <span class="tag tag-surprise" data-emotion="surprise">
+                        <span class="tag-emoji">😲</span>
+                        <span class="tag-name">Surprise</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="footer-info">
+                <div class="footer-links">
+                    <a href="https://github.com/PranitaAnnaldas/facial-expression-recognition" target="_blank">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="#" id="aboutBtn">
+                        <i class="fas fa-info-circle"></i> About
+                    </a>
+                    <a href="#" id="helpBtn">
+                        <i class="fas fa-question-circle"></i> Help
+                    </a>
+                </div>
+                <p class="copyright">
+                    Made with <i class="fas fa-heart"></i> using TensorFlow & Flask
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal for About/Help -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
