@@ -37,13 +37,21 @@ def index():
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
+        # Log request received
+        print("📥 Prediction request received")
+        
         data = request.json
+        if not data or 'image' not in data:
+            return jsonify({'error': 'No image data provided'}), 400
+        
         image_data = data['image'].split(',')[1]
+        print(f"📊 Image data size: {len(image_data)} bytes")
         
         # Decode base64 image
         image_bytes = base64.b64decode(image_data)
         image = Image.open(io.BytesIO(image_bytes))
         image_np = np.array(image)
+        print(f"🖼️ Image shape: {image_np.shape}")
         
         # Convert RGB to BGR for OpenCV
         if len(image_np.shape) == 3 and image_np.shape[2] == 3:
@@ -52,22 +60,27 @@ def predict():
             image_np = cv2.cvtColor(image_np, cv2.COLOR_GRAY2BGR)
         
         # Detect faces
+        print("👤 Detecting faces...")
         gray = cv2.cvtColor(image_np, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+        print(f"✅ Found {len(faces)} face(s)")
         
         if len(faces) == 0:
             return jsonify({'error': 'No face detected in the image'}), 400
         
         results = []
-        for (x, y, w, h) in faces:
+        for idx, (x, y, w, h) in enumerate(faces):
+            print(f"🎭 Processing face {idx + 1}/{len(faces)}")
             face_roi = image_np[y:y+h, x:x+w]
             preprocessed_face = preprocess_face(face_roi)
             
             # Predict emotion
+            print(f"🧠 Predicting emotion for face {idx + 1}...")
             predictions = model.predict(preprocessed_face, verbose=0)[0]
             emotion_idx = np.argmax(predictions)
             emotion = EMOTIONS[emotion_idx]
             confidence = float(predictions[emotion_idx])
+            print(f"✅ Detected: {emotion} ({confidence:.2%})")
             
             # Get all emotion probabilities
             emotion_probs = {EMOTIONS[i]: float(predictions[i]) for i in range(len(EMOTIONS))}
@@ -79,10 +92,14 @@ def predict():
                 'bbox': {'x': int(x), 'y': int(y), 'w': int(w), 'h': int(h)}
             })
         
+        print(f"🎉 Successfully processed {len(results)} face(s)")
         return jsonify({'success': True, 'faces': results})
     
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        print(f"❌ Error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 @app.route('/health')
 def health():
