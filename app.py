@@ -12,8 +12,17 @@ CORS(app)
 
 # Load the trained model
 import os
+import gc
+
 MODEL_PATH = os.environ.get('MODEL_PATH', 'trained_models/emotion_model_best.h5')
+
+# Load model with memory optimization
+print("📦 Loading model with memory optimization...")
 model = tf.keras.models.load_model(MODEL_PATH)
+
+# Force garbage collection to free memory
+gc.collect()
+print("✅ Model loaded and memory optimized")
 
 # Emotion labels
 EMOTIONS = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
@@ -74,13 +83,17 @@ def predict():
             face_roi = image_np[y:y+h, x:x+w]
             preprocessed_face = preprocess_face(face_roi)
             
-            # Predict emotion
+            # Predict emotion with memory cleanup
             print(f"🧠 Predicting emotion for face {idx + 1}...")
             predictions = model.predict(preprocessed_face, verbose=0)[0]
             emotion_idx = np.argmax(predictions)
             emotion = EMOTIONS[emotion_idx]
             confidence = float(predictions[emotion_idx])
             print(f"✅ Detected: {emotion} ({confidence:.2%})")
+            
+            # Clean up to free memory
+            del preprocessed_face
+            gc.collect()
             
             # Get all emotion probabilities
             emotion_probs = {EMOTIONS[i]: float(predictions[i]) for i in range(len(EMOTIONS))}
@@ -93,6 +106,11 @@ def predict():
             })
         
         print(f"🎉 Successfully processed {len(results)} face(s)")
+        
+        # Clean up memory after processing
+        del image_np, gray, faces
+        gc.collect()
+        
         return jsonify({'success': True, 'faces': results})
     
     except Exception as e:
