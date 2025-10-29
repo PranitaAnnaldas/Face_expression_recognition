@@ -1,0 +1,10 @@
+# Railway/Nixpacks configuration for OpenCV dependencies
+
+[phases.setup]
+aptPkgs = ["libgl1-mesa-glx", "libglib2.0-0"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
+
+[start]
+cmd = "gunicorn app:app --timeout 180 --workers 1 --bind 0.0.0.0:$PORT"
