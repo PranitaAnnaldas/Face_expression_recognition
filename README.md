@@ -9,9 +9,9 @@ A real-time facial expression recognition system powered by deep learning. This 
 
 ## 🌐 Live Demo
 
-**Try it now**: [https://facial-expression-recognition-3stp.onrender.com](https://facial-expression-recognition-3stp.onrender.com)
+**🚀 Try it now**: [https://web-production-f9c74.up.railway.app](https://web-production-f9c74.up.railway.app)
 
-> **Note**: The app may take 30-60 seconds to wake up on first visit (free tier limitation)
+> **Deployed on Railway** - Fast, reliable, and optimized for ML applications!
 
 ## 🌟 Features
 
@@ -239,75 +239,67 @@ The included Jupyter notebook (`Face_expression_recognition.ipynb`) contains:
 
 ## 🚀 Deployment
 
-### Live on Render ✅
+### Live on Railway ✅
 
-This project is deployed at: **[https://facial-expression-recognition-3stp.onrender.com](https://facial-expression-recognition-3stp.onrender.com)**
+**Deployed at**: [https://web-production-f9c74.up.railway.app](https://web-production-f9c74.up.railway.app)
 
-**Deployment Details:**
-- Platform: Render (Free Tier)
-- Server: Gunicorn with 1 worker
-- Region: Auto-selected
-- Status: Live 🟢
-
-**Known Limitations (Free Tier):**
-- ⏱️ Cold start: 30-60 seconds on first visit
-- 💤 Spins down after 15 minutes of inactivity
-- 🐌 Slower inference (CPU only, no GPU)
-- 📦 512 MB RAM limit
+**Platform**: Railway  
+**Status**: Live 🟢  
+**Performance**: Optimized for ML applications
 
 ### Local Development
 ```bash
+# Activate virtual environment
+venv\Scripts\activate  # Windows
+source venv/bin/activate  # Mac/Linux
+
+# Run the app
 python app.py
 ```
 
 ### Deploy Your Own
 
-#### Render (Recommended)
+#### Railway (Recommended for ML Apps)
 1. Fork this repository
-2. Create account on [Render](https://render.com)
-3. Click "New +" → "Web Service"
-4. Connect your GitHub repository
-5. Configure:
+2. Go to [Railway.app](https://railway.app)
+3. Click "New Project" → "Deploy from GitHub"
+4. Select your repository
+5. Railway auto-detects and deploys
+6. Get $5 free credit per month
+
+#### Render
+1. Create account on [Render](https://render.com)
+2. Click "New +" → "Web Service"
+3. Connect your GitHub repository
+4. Configure:
    - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app:app`
-   - **Environment**: Python 3
-6. Click "Create Web Service"
+   - **Start Command**: `gunicorn app:app --timeout 180 --workers 1 --bind 0.0.0.0:$PORT`
+5. Click "Create Web Service"
 
-#### Heroku
-```bash
-# Install Heroku CLI
-heroku login
-heroku create your-app-name
-git push heroku main
-```
-
-#### Railway
-1. Go to [Railway.app](https://railway.app)
-2. Click "New Project" → "Deploy from GitHub"
-3. Select your repository
-4. Railway auto-detects and deploys
-
-### Production (Gunicorn)
-```bash
-pip install gunicorn
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
-```
-
-### Docker
+#### Docker
 ```dockerfile
 FROM python:3.10-slim
+
+# Install system dependencies for OpenCV
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
 COPY . .
-EXPOSE 5000
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
+EXPOSE 8080
+
+CMD ["gunicorn", "app:app", "--timeout", "180", "--workers", "1", "--bind", "0.0.0.0:8080"]
 ```
 
 Build and run:
 ```bash
 docker build -t emotion-recognition .
-docker run -p 5000:5000 emotion-recognition
+docker run -p 8080:8080 emotion-recognition
 ```
 
 ## 🤝 Contributing
