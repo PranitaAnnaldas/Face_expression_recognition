@@ -196,9 +196,6 @@ hideAll();
 placeholder.style.display = 'block';
 
 
-// History Management
-let detectionHistory = JSON.parse(localStorage.getItem('detectionHistory') || '[]');
-
 // Modal Management
 const modal = document.getElementById('modal');
 const modalBody = document.getElementById('modalBody');
@@ -207,7 +204,6 @@ const aboutBtn = document.getElementById('aboutBtn');
 const helpBtn = document.getElementById('helpBtn');
 const shareBtn = document.getElementById('shareBtn');
 const downloadBtn = document.getElementById('downloadBtn');
-const clearHistoryBtn = document.getElementById('clearHistory');
 
 // Toast Notification
 function showToast(message, type = 'info') {
@@ -369,82 +365,9 @@ if (downloadBtn) {
     };
 }
 
-// History Functions
-function addToHistory(imageData, emotion, confidence) {
-    const historyItem = {
-        id: Date.now(),
-        image: imageData,
-        emotion: emotion,
-        confidence: confidence,
-        timestamp: new Date().toISOString()
-    };
-    
-    detectionHistory.unshift(historyItem);
-    if (detectionHistory.length > 10) {
-        detectionHistory = detectionHistory.slice(0, 10);
-    }
-    
-    localStorage.setItem('detectionHistory', JSON.stringify(detectionHistory));
-    displayHistory();
-}
+// History removed: the app no longer stores recent detections in localStorage
 
-function displayHistory() {
-    const historySection = document.getElementById('history');
-    const historyContent = document.getElementById('historyContent');
-    
-    if (detectionHistory.length === 0) {
-        historySection.style.display = 'none';
-        return;
-    }
-    
-    historySection.style.display = 'block';
-    historyContent.innerHTML = '';
-    
-    detectionHistory.forEach(item => {
-        const emoji = emotionEmojis[item.emotion] || '😊';
-        const div = document.createElement('div');
-        div.className = 'history-item';
-        div.innerHTML = `
-            <img src="${item.image}" alt="${item.emotion}">
-            <div class="history-emotion">${emoji}</div>
-            <div class="history-label">${item.emotion}</div>
-            <div style="font-size: 0.8em; color: #999;">${(item.confidence * 100).toFixed(1)}%</div>
-        `;
-        div.onclick = () => {
-            showPreview(item.image);
-            // Re-analyze if needed
-        };
-        historyContent.appendChild(div);
-    });
-}
-
-if (clearHistoryBtn) {
-    clearHistoryBtn.onclick = () => {
-        if (confirm('Clear all detection history?')) {
-            detectionHistory = [];
-            localStorage.removeItem('detectionHistory');
-            displayHistory();
-            showToast('History cleared!', 'info');
-        }
-    };
-}
-
-// Enhanced displayResults to add to history
-const originalDisplayResults = displayResults;
-displayResults = function(faces) {
-    originalDisplayResults(faces);
-    
-    if (faces.length > 0) {
-        const mainFace = faces[0];
-        const imageData = preview.src;
-        addToHistory(imageData, mainFace.emotion, mainFace.confidence);
-        
-        // Show download button
-        if (downloadBtn) {
-            downloadBtn.style.display = 'inline-block';
-        }
-    }
-};
+// displayResults remains unchanged and will not save history
 
 // Keyboard Shortcuts
 document.addEventListener('keydown', (e) => {
@@ -516,7 +439,6 @@ imageContainer.addEventListener('drop', (e) => {
 });
 
 // Initialize
-displayHistory();
 showToast('Welcome! Upload an image or use webcam to get started.', 'info');
 
 // Add animation to emotion tags
